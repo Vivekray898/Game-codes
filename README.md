@@ -2,7 +2,7 @@ Here’s a simple `README.md` template for your GitHub repository showcasing the
 
 ---
 
-# Simple Games in Go
+# Simple Games in Go/Python
 
 Welcome to the **Simple Games in Go** repository! 🎮 This project contains basic games written in Go (Golang) to demonstrate the power of Go for building interactive console applications. Whether you're learning Go or just looking for some fun coding exercises, these games are a great starting point!
 
@@ -33,8 +33,8 @@ Play the classic game of Rock, Paper, Scissors against the computer.
 ### Running the Games
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/simple-games-go.git
-   cd simple-games-go
+   git clone https://github.com/Vivekray898/Game-codes.git
+   cd Game-codes
    ```
 2. Run the desired game:
    - **Number Guessing Game**:
