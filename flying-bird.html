@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flying Bird Animation</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { width: 100vw; height: 100vh; display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.155.0/three.min.js"></script>
+    <script>
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x87CEEB, 1); // Sky blue background
+        document.body.appendChild(renderer.domElement);
+
+        // Create bird
+        const bird = new THREE.Group();
+
+        // Body
+        const bodyGeo = new THREE.SphereGeometry(0.3, 16, 16);
+        const bodyMat = new THREE.MeshPhongMaterial({ color: 0xffd700 });
+        const body = new THREE.Mesh(bodyGeo, bodyMat);
+        bird.add(body);
+
+        // Beak
+        const beakGeo = new THREE.ConeGeometry(0.1, 0.3, 16);
+        const beakMat = new THREE.MeshPhongMaterial({ color: 0xff4500 });
+        const beak = new THREE.Mesh(beakGeo, beakMat);
+        beak.position.z = 0.4;
+        beak.rotation.x = Math.PI/4;
+        bird.add(beak);
+
+        // Eyes
+        const eyeGeo = new THREE.SphereGeometry(0.05, 16, 16);
+        const eyeMat = new THREE.MeshPhongMaterial({ color: 0x000000 });
+        const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
+        leftEye.position.set(0.15, 0.15, 0.3);
+        const rightEye = new THREE.Mesh(eyeGeo, eyeMat);
+        rightEye.position.set(-0.15, 0.15, 0.3);
+        bird.add(leftEye, rightEye);
+
+        // Wings
+        const wingGeo = new THREE.BoxGeometry(0.2, 0.8, 0.1);
+        const wingMat = new THREE.MeshPhongMaterial({ color: 0xffa500 });
+        const leftWing = new THREE.Mesh(wingGeo, wingMat);
+        leftWing.position.x = -0.4;
+        const rightWing = new THREE.Mesh(wingGeo, wingMat);
+        rightWing.position.x = 0.4;
+        bird.add(leftWing, rightWing);
+
+        // Position bird
+        bird.position.y = 2;
+        scene.add(bird);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(5, 10, 3);
+        scene.add(directionalLight);
+
+        // Camera position
+        camera.position.set(0, 2, 5);
+        camera.lookAt(0, 2, 0);
+
+        // Animation variables
+        let wingAngle = 0;
+        let flyAngle = 0;
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Flap wings
+            wingAngle += 0.1;
+            leftWing.rotation.z = Math.sin(wingAngle) * Math.PI/4;
+            rightWing.rotation.z = -Math.sin(wingAngle) * Math.PI/4;
+            
+            // Fly in circle
+            flyAngle += 0.01;
+            bird.position.x = Math.sin(flyAngle) * 3;
+            bird.position.y = Math.cos(flyAngle) * 1.5 + 2;
+            bird.rotation.y = Math.PI/2 - flyAngle;
+
+            renderer.render(scene, camera);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    </script>
+</body>
+</html>
