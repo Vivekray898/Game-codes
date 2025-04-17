@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3D Human Model</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <!-- Updated Three.js CDN link -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.155.0/three.min.js"></script>
+    <script>
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Create human figure
+        const human = new THREE.Group();
+
+        // Head
+        const headGeo = new THREE.SphereGeometry(0.5, 32, 32);
+        const headMat = new THREE.MeshPhongMaterial({ color: 0xffcc99 });
+        const head = new THREE.Mesh(headGeo, headMat);
+        head.position.y = 1.2;
+        human.add(head);
+
+        // Body
+        const bodyGeo = new THREE.CylinderGeometry(0.3, 0.3, 1.5, 32);
+        const bodyMat = new THREE.MeshPhongMaterial({ color: 0x336699 });
+        const body = new THREE.Mesh(bodyGeo, bodyMat);
+        body.position.y = 0.5;
+        human.add(body);
+
+        // Arms
+        const armGeo = new THREE.CylinderGeometry(0.1, 0.1, 0.8, 32);
+        const armMat = new THREE.MeshPhongMaterial({ color: 0x336699 });
+        
+        const leftArm = new THREE.Mesh(armGeo, armMat);
+        leftArm.position.x = -0.6;
+        leftArm.position.y = 0.8;
+        leftArm.rotation.z = Math.PI/4;
+        human.add(leftArm);
+
+        const rightArm = new THREE.Mesh(armGeo, armMat);
+        rightArm.position.x = 0.6;
+        rightArm.position.y = 0.8;
+        rightArm.rotation.z = -Math.PI/4;
+        human.add(rightArm);
+
+        // Legs
+        const legGeo = new THREE.CylinderGeometry(0.15, 0.15, 0.8, 32);
+        const legMat = new THREE.MeshPhongMaterial({ color: 0x663300 });
+        
+        const leftLeg = new THREE.Mesh(legGeo, legMat);
+        leftLeg.position.x = -0.25;
+        leftLeg.position.y = -0.5;
+        human.add(leftLeg);
+
+        const rightLeg = new THREE.Mesh(legGeo, legMat);
+        rightLeg.position.x = 0.25;
+        rightLeg.position.y = -0.5;
+        human.add(rightLeg);
+
+        scene.add(human);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(1, 2, 3);
+        scene.add(directionalLight);
+
+        // Camera position
+        camera.position.z = 5;
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            human.rotation.y += 0.01;
+            renderer.render(scene, camera);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    </script>
+</body>
+</html>
